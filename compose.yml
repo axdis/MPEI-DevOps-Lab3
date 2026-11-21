@@ -1,0 +1,61 @@
+services:
+  db:
+    image: postgis/postgis:17-3.6
+    container_name: moscow-events-db
+    environment:
+      POSTGRES_DB: ${PG_DB_NAME:-moscow_events}
+      POSTGRES_USER: ${PG_USER_NAME:-postgres}
+      POSTGRES_PASSWORD: ${PG_USER_PASSWORD:-change-me-local}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER_NAME:-postgres} -d ${PG_DB_NAME:-moscow_events}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  backend:
+    image: ghcr.io/nelkor/moscow-events:1.0.0
+    container_name: moscow-events-backend
+    environment:
+      PG_HOST: db
+      PG_PORT: 5432
+      PG_DB_NAME: ${PG_DB_NAME:-moscow_events}
+      PG_USER_NAME: ${PG_USER_NAME:-postgres}
+      PG_USER_PASSWORD: ${PG_USER_PASSWORD:-change-me-local}
+      SEED_MODE: ${SEED_MODE:-sample}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: moscow-events-frontend
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

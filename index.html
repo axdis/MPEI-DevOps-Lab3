@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111827">
+  <title>Афиша Москвы — поиск событий</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Афиша Москвы">
+        <span class="brand-mark">М</span>
+        <span>МОСКВА<span class="brand-muted">.СОБЫТИЯ</span></span>
+      </a>
+      <a class="api-link" href="/docs" target="_blank" rel="noreferrer">Документация API ↗</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> ГОРОДСКАЯ АФИША</div>
+        <h1>Найдите своё<br><span>следующее событие.</span></h1>
+        <p class="hero-copy">Ищите мероприятия, артистов, площадки и серии в одном месте.</p>
+
+        <form id="search-form" class="search-box">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="search-input" type="search" placeholder="Например, джаз, концерт, Зарядье..." autocomplete="off" minlength="1">
+          <button id="search-button" type="submit">Найти <span>→</span></button>
+        </form>
+        <div class="search-hint">Введите название, исполнителя или место проведения</div>
+      </section>
+
+      <section id="results-area" class="results-area" hidden>
+        <div class="results-heading">
+          <div>
+            <div class="eyebrow">РЕЗУЛЬТАТЫ ПОИСКА</div>
+            <h2 id="results-title">Результаты</h2>
+          </div>
+          <button id="clear-button" class="clear-button" type="button">Очистить поиск</button>
+        </div>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+
+        <nav class="tabs" aria-label="Категории результатов">
+          <button class="tab active" data-target="events" type="button">События <span id="count-events">0</span></button>
+          <button class="tab" data-target="artists" type="button">Артисты <span id="count-artists">0</span></button>
+          <button class="tab" data-target="venues" type="button">Площадки <span id="count-venues">0</span></button>
+          <button class="tab" data-target="series" type="button">Серии <span id="count-series">0</span></button>
+        </nav>
+
+        <section class="result-section active" id="section-events">
+          <div class="section-title"><div><span class="section-icon">✦</span><h3>События</h3></div><span class="section-total" id="total-events"></span></div>
+          <div class="cards" id="cards-events"></div>
+        </section>
+        <section class="result-section" id="section-artists">
+          <div class="section-title"><div><span class="section-icon">♫</span><h3>Артисты</h3></div><span class="section-total" id="total-artists"></span></div>
+          <div class="cards" id="cards-artists"></div>
+        </section>
+        <section class="result-section" id="section-venues">
+          <div class="section-title"><div><span class="section-icon">⌖</span><h3>Площадки</h3></div><span class="section-total" id="total-venues"></span></div>
+          <div class="cards" id="cards-venues"></div>
+        </section>
+        <section class="result-section" id="section-series">
+          <div class="section-title"><div><span class="section-icon">▤</span><h3>Серии</h3></div><span class="section-total" id="total-series"></span></div>
+          <div class="cards" id="cards-series"></div>
+        </section>
+      </section>
+
+      <section id="welcome" class="welcome">
+        <div class="welcome-symbol">✳</div>
+        <h2>Весь город — в одном поиске</h2>
+        <p>Результаты будут сгруппированы по типам, чтобы вы могли быстро перейти к нужной категории.</p>
+        <div class="category-pills"><span>✦ События</span><span>♫ Артисты</span><span>⌖ Площадки</span><span>▤ Серии</span></div>
+      </section>
+    </main>
+
+    <footer><span>МОСКВА.СОБЫТИЯ</span><span>Единый поиск по городской афише</span></footer>
+  </div>
+</body>
+</html>
